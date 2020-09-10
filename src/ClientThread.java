@@ -28,7 +28,7 @@ public class ClientThread extends Thread{
   private DataOutputStream out = null;
   private String line = null;
   
-  public int clientID = -1;
+  public int clientID = 0;
   
   public ClientThread (ServChat myServer, Socket mySock)
   {

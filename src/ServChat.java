@@ -22,7 +22,7 @@ public class ServChat implements Runnable{
   private ServerSocket servSock = null;
   private Thread thread = null;
   private ClientThread client = null;
-  private int clientID = 0;
+  private int clientID = -1;
   
   public static void main(String args[])
   {

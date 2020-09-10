@@ -3,10 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Chad/Documents/NetBeansProjects/P2P-chat/src/Server.java</file>
-            <file>file:/C:/Users/Chad/Documents/NetBeansProjects/P2P-chat/src/ServerGUI.java</file>
-            <file>file:/C:/Users/Chad/Documents/NetBeansProjects/P2P-chat/src/ClientGUI.java</file>
-            <file>file:/C:/Users/Chad/Documents/NetBeansProjects/P2P-chat/src/Client.java</file>
+            <file>file:/C:/Users/Chad/Documents/NetBeansProjects/P2P-chat/src/ClientThread.java</file>
+            <file>file:/C:/Users/Chad/Documents/NetBeansProjects/P2P-chat/src/ServChat.java</file>
         </group>
     </open-files>
 </project-private>
