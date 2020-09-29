@@ -1,5 +1,4 @@
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -7,8 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.nio.charset.Charset;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import javax.swing.JOptionPane;
 
 /*
@@ -28,6 +27,7 @@ public class ClientThread extends Thread{
   private DataOutputStream out = null;
   private String line = null;
   
+  
   public int clientID = 0;
   
   public ClientThread (ServChat myServer, Socket mySock)
@@ -36,32 +36,14 @@ public class ClientThread extends Thread{
     sock = mySock;
     clientID = mySock.getLocalPort();
   }
+  @Override
   public void run()
   {
-    try {
-      line = input.readLine();
-      
-       while (!line.equals("end"))
-    {
-        if(!line.equals(null))
-        {
-          DataOutputStream out = new DataOutputStream(sock.getOutputStream()); 
-          out.writeUTF(line);
-          out.flush();
-//--------------------------------------------------------------------------         
-          String outString = new DataInputStream(sock.getInputStream()).readUTF();
-          String newLine = JOptionPane.showInputDialog("Server : " + outString);
-          line = newLine;
-        }
-    }
-      close();
-    } catch (IOException ex) {
-      System.out.println(ex);
-    }
+    com();
   }
-  public void open() throws IOException
+  public void open(/*String conMessage*/) throws IOException
   {  
-    String string = "Connection from " + "X" + "successful";
+    String string = "Connection to server succesful";//conMessage;
     InputStream inputStream = new ByteArrayInputStream(string.getBytes(Charset.forName("UTF-8")));
     input = new DataInputStream(inputStream);
   }
@@ -69,5 +51,51 @@ public class ClientThread extends Thread{
   {  
     sock.close();
     input.close();
+  }
+  
+  public void com()
+  {
+    try {   
+      System.out.println("client run method");
+      line = input.readLine();  
+      while (true)
+      {
+        if(!line.equals(null))
+        {
+          //if(!line.equals("end")){
+          out = new DataOutputStream(sock.getOutputStream()); 
+          out.writeUTF(line);
+          out.flush();//}
+//--------------------------------------------------------------------------         
+        }
+        String in = new DataInputStream(sock.getInputStream()).readUTF();
+        String outString = JOptionPane.showInputDialog("Server : " + in/*, "Client " + clientID*/);
+        line = outString;
+         
+        if(outString.equals("end"))
+        {
+          Socket preSock = sock;
+          System.out.println("presock is : " + preSock.getLocalPort());
+          for(int i=sock.getLocalPort()-1; i > 0 ; i--)
+          {
+            if(server.myThreadDictionary.containsKey(i))
+            {
+              sock = server.myThreadDictionary.get(i).sock;
+              System.out.println("sock is : " + sock.getLocalPort());
+              //JOptionPane.showMessageDialog(null, "Client " +preSock.getLocalPort()+ " Disconnected");
+              out.writeUTF(preSock.getLocalPort() + " Disconnected");
+              out.flush();
+              i = 0;
+            }
+          }
+          preSock.close();
+          server.myThreadDictionary.remove(preSock.getLocalPort());
+          server.mySockDictionary.remove(preSock.getLocalPort());
+        }
+        
+      }
+    } catch (IOException ex) {
+      System.out.println("cl " + ex);
+    }
   }
 }
